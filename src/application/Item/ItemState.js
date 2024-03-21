@@ -1,7 +1,7 @@
 class ItemState {
   /**
    * 
-   * @param {Item} item 
+   * @param {Item} item
    */
   toggleItem(item) {
     if (item.isExpanded) {

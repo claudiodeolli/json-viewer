@@ -1,23 +1,25 @@
-import oboe from 'oboe';
+import untruncateJson from "untruncate-json";
 
 export class HomeContext {
   /**
    * @param {Event} event
    * */
-  static handleFileUpload(event) {
+  static async handleFileUpload(event) {
     const file = event.target.files[0];
-    const reader = new FileReader();
+    const response = await fetch(URL.createObjectURL(file));
+    const reader = response.body.getReader();
+    let result = '';
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      result += new TextDecoder("utf-8").decode(value);
+      const output = JSON.parse(untruncateJson(result));
+      const sizeInBytes = new TextEncoder().encode(JSON.stringify(output)).length;
 
-    reader.onload = function(e) {
-      oboe(e.target.result)
-        .node('!.*', function(node) {
-          console.log(node);
-        })
-        .fail(function(error) {
-          console.error('Error:', error);
-        });
-    };
-
-    reader.readAsDataURL(file);
+      console.log(sizeInBytes)
+      console.log(output);
+    }
+    // const json = JSON.parse(result);
+    // console.log(json);
   }
 }
