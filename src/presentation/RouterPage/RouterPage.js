@@ -1,4 +1,4 @@
-import { RouterState } from '../../application/Router/RouterState.js';
+import { RouterState } from '../../infra/Router/RouterState.js';
 
 export default class RouterPage extends HTMLElement{
 
